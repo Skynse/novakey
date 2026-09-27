@@ -1,0 +1,49 @@
+# Root build outputs
+/build/
+/.build/
+/target/
+/cmake-build-*/
+/CMakeCache.txt
+/CMakeFiles/
+/Makefile
+/cmake_install.cmake
+/compile_commands.json
+
+# Arduino / Pico generated outputs
+/build-*/
+*.elf
+*.bin
+*.hex
+*.map
+*.uf2
+*.eep
+*.o
+*.a
+
+# QMK generated output (the firmware source remains tracked)
+/qmk/build/
+/qmk/qmk_firmware/.build/
+/qmk/qmk_firmware/novakey_default.*
+
+# Local IDE and tooling state
+/.vscode/
+/.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+__pycache__/
+*.py[cod]
+
+# Logs and local environment
+*.log
+.env
+.env.*
+!.env.example
+
+# KiCad / FreeCAD transient files when working from this repo
+*.kicad_prl
+*.kicad_lck
+*.lck
+*.FCBak
+**/.history/

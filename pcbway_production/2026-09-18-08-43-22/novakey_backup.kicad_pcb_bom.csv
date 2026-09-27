@@ -1,0 +1,6 @@
+﻿Designator,Quantity,Value,Footprint,Package,MPN,DNP,Mount_Type,Description,KiLib_Generator,Sim.Device,Sim.Pins
+A1,1,RaspberryPi_Pico,RaspberryPi_Pico_Common_THT,,,,tht,"Versatile and inexpensive microcontroller module powered by RP2040 dual-core Arm Cortex-M0+ processor up to 133 MHz, 264kB SRAM, 2MB QSPI flash; also supports Raspberry Pi Pico 2",,,
+"D1, D10, D11, D12, D13, D14, D15, D16, D2, D3, D4, D5, D6, D7, D8, D9",16,D,D_DO-35_SOD27_P7.62mm_Horizontal,,,,tht,Diode,diode/THT,D,1=K 2=A
+"SW1, SW2, SW3",3,RotaryEncoder_Switch_MP,RotaryEncoder_Alps_EC11E-Switch_Vertical_H20mm,,,,tht,"Rotary encoder, dual channel, incremental quadrate outputs, with switch and MP Pin",,,
+"SW10, SW11, SW12, SW13, SW14, SW15, SW16, SW17, SW18, SW19, SW4, SW5, SW6, SW7, SW8, SW9",16,SW_Push_45deg,SW_Hotswap_Kailh_MX_1.00u,,,,smt,"Push button switch, normally open, two pins, 45° tilted",,,
+U2,1,ER_OLEDM0.91_1x-I2C,ER_OLEDM0.91_1x-I2C,,,,tht,"SSD1306 OLED module, 0.91 inch, 128x32, I2C",,,

@@ -1,0 +1,6 @@
+"Reference","Qty","Value","DNP","Exclude from BOM","Exclude from Board","Footprint","Datasheet"
+"A1","1","RaspberryPi_Pico","","","","Module:RaspberryPi_Pico_Common_THT","https://datasheets.raspberrypi.com/pico/pico-datasheet.pdf"
+"D1,D2,D3,D4,D5,D6,D7,D8,D9,D10,D11,D12,D13,D14,D15,D16","16","D","","","","Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",""
+"SW1,SW2,SW3","3","RotaryEncoder_Switch_MP","","","","Rotary_Encoder:RotaryEncoder_Alps_EC11E-Switch_Vertical_H20mm",""
+"SW4,SW5,SW6,SW7,SW8,SW9,SW10,SW11,SW12,SW13,SW14,SW15,SW16,SW17,SW18,SW19","16","SW_Push_45deg","","","","PCM_Switch_Keyboard_Hotswap_Kailh:SW_Hotswap_Kailh_MX_1.00u",""
+"U2","1","ER_OLEDM0.91_1x-I2C","","","","Display:ER_OLEDM0.91_1x-I2C","https://www.buydisplay.com/download/manual/ER-OLEDM0.91-1_Datasheet.pdf"

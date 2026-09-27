@@ -1,0 +1,24 @@
+//! Build script: place `memory.x` where the linker can find it and set the
+//! RP2040 linker arguments.
+
+use std::env;
+use std::fs::File;
+use std::io::Write;
+use std::path::PathBuf;
+
+fn main() {
+    let out = &PathBuf::from(env::var_os("OUT_DIR").unwrap());
+    File::create(out.join("memory.x"))
+        .unwrap()
+        .write_all(include_bytes!("memory.x"))
+        .unwrap();
+    println!("cargo:rustc-link-search={}", out.display());
+
+    println!("cargo:rerun-if-changed=memory.x");
+    println!("cargo:rerun-if-changed=build.rs");
+
+    // `--nmagic` is required because FLASH starts at 0x10000100, not 0x10000.
+    println!("cargo:rustc-link-arg=--nmagic");
+    println!("cargo:rustc-link-arg=-Tlink.x");
+    println!("cargo:rustc-link-arg=-Tdefmt.x");
+}

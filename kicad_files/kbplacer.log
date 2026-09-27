@@ -1,0 +1,305 @@
+INFO: kbplacer_plugin_action.py:73: Plugin version: 0.19
+INFO: kbplacer_plugin_action.py:74: Python version: '3.14.7 (main, Aug 10 2026, 00:00:00) [GCC 16.1.1 20260515 (Red Hat 16.1.1-2)]'
+INFO: kbplacer_plugin_action.py:75: KiCad version: 10.0.6 with 4.2.4 gtk3 (phoenix) wxWidgets 3.2.9
+INFO: kbplacer_dialog.py:799: Language: en
+INFO: kbplacer_plugin_action.py:83: GUI state: {"layout_path": "/home/neckles/Downloads/keyboard-layout.json", "key_distance": [19.05, 19.05], "key_info": {"annotation_format": "SW{}", "position_option": "Default", "position": {"x": 0.0, "y": 0.0, "orientation": 0.0, "side": "Front"}, "template_path": "", "start_index": 4}, "enable_diode_placement": true, "route_switches_with_diodes": true, "optimize_diodes_orientation": false, "diode_info": {"annotation_format": "D{}", "position_option": "Default", "position": {"x": 5.08, "y": 4.0, "orientation": 90.0, "side": "Back"}, "template_path": "", "start_index": -1}, "additional_elements": [{"annotation_format": "ST{}", "position_option": "Custom", "position": {"x": 0.0, "y": 0.0, "orientation": 0.0, "side": "Front"}, "template_path": "", "start_index": -1}], "route_rows_and_columns": true, "template_path": "", "generate_outline": false, "outline_delta": 0.0, "layout_offset": null}
+WARNING: key_placer.py:145: Unexpected switch net position detected. Each switch should have exactly two unique nets unambiguously defining its position in the key matrix (one ROW and one COL). The following switches do not: SW1 (nets: ['unconnected-(SW1-PadA)', 'unconnected-(SW1-PadB)', 'unconnected-(SW1-PadC)', 'unconnected-(SW1-PadMP)', 'unconnected-(SW1-PadS1)', 'unconnected-(SW1-PadS2)']), SW2 (nets: ['unconnected-(SW2-PadA)', 'unconnected-(SW2-PadB)', 'unconnected-(SW2-PadC)', 'unconnected-(SW2-PadMP)', 'unconnected-(SW2-PadS1)', 'unconnected-(SW2-PadS2)']), SW3 (nets: ['unconnected-(SW3-PadA)', 'unconnected-(SW3-PadB)', 'unconnected-(SW3-PadC)', 'unconnected-(SW3-PadMP)', 'unconnected-(SW3-PadS1)', 'unconnected-(SW3-PadS2)']). Their pads may be unconnected or wired incorrectly, so switch-by-matrix association can't be used.
+DEBUG: key_placer.py:153: Switches by nets: {}
+DEBUG: key_placer.py:157: Diodes by switch: {'SW4': ['D1'], 'SW19': ['D16'], 'SW9': ['D6'], 'SW16': ['D13'], 'SW15': ['D12'], 'SW5': ['D2'], 'SW18': ['D15'], 'SW12': ['D9'], 'SW7': ['D4'], 'SW17': ['D14'], 'SW10': ['D7'], 'SW13': ['D10'], 'SW11': ['D8'], 'SW14': ['D11'], 'SW6': ['D3'], 'SW8': ['D5']}
+INFO: key_placer.py:785: Using key 1U distance: (19.05, 19.05) mm
+INFO: key_placer.py:803: Layout offset: (28575000, 28575000)
+DEBUG: kle_serial.py:1131: Layout with: x_ortholinear_keys=16, y_ortholinear_keys=16, rotated_keys=0, encoders=0, iso_enters=0 and unrecognized_shape_keys=0
+DEBUG: kle_serial.py:1156: Layout tagged: [<KeyboardTag.ORTHOLINEAR: 1>]
+DEBUG: board_modifier.py:119: Setting SW4 footprint position: (38100000, 38100000)
+DEBUG: board_modifier.py:119: Setting SW5 footprint position: (57150000, 38100000)
+DEBUG: board_modifier.py:119: Setting SW6 footprint position: (76200000, 38100000)
+DEBUG: board_modifier.py:119: Setting SW7 footprint position: (95250000, 38100000)
+DEBUG: board_modifier.py:119: Setting SW8 footprint position: (38100000, 57150000)
+DEBUG: board_modifier.py:119: Setting SW9 footprint position: (57150000, 57150000)
+DEBUG: board_modifier.py:119: Setting SW10 footprint position: (76200000, 57150000)
+DEBUG: board_modifier.py:119: Setting SW11 footprint position: (95250000, 57150000)
+DEBUG: board_modifier.py:119: Setting SW12 footprint position: (38100000, 76200000)
+DEBUG: board_modifier.py:119: Setting SW13 footprint position: (57150000, 76200000)
+DEBUG: board_modifier.py:119: Setting SW14 footprint position: (76200000, 76200000)
+DEBUG: board_modifier.py:119: Setting SW15 footprint position: (95250000, 76200000)
+DEBUG: board_modifier.py:119: Setting SW16 footprint position: (38100000, 95250000)
+DEBUG: board_modifier.py:119: Setting SW17 footprint position: (57150000, 95250000)
+DEBUG: board_modifier.py:119: Setting SW18 footprint position: (76200000, 95250000)
+DEBUG: board_modifier.py:119: Setting SW19 footprint position: (95250000, 95250000)
+INFO: key_placer.py:1238: Diode info: [ElementInfo(annotation_format='D{}', position_option=<PositionOption.DEFAULT: 'Default'>, position=ElementPosition(x=5.08, y=4.0, orientation=90.0, side=<Side.BACK: 'Back'>), template_path='', start_index=-1)]
+DEBUG: board_modifier.py:132: Getting SW1 footprint position: (119115000, 87035000)
+DEBUG: board_modifier.py:132: Getting SW2 footprint position: (109855000, 50372000)
+DEBUG: board_modifier.py:132: Getting SW3 footprint position: (130810000, 50372000)
+DEBUG: board_modifier.py:132: Getting SW4 footprint position: (38100000, 38100000)
+DEBUG: board_modifier.py:119: Setting D1 footprint position: (43180000, 42100000)
+DEBUG: board_modifier.py:132: Getting SW5 footprint position: (57150000, 38100000)
+DEBUG: board_modifier.py:119: Setting D2 footprint position: (62230000, 42100000)
+DEBUG: board_modifier.py:132: Getting SW6 footprint position: (76200000, 38100000)
+DEBUG: board_modifier.py:119: Setting D3 footprint position: (81280000, 42100000)
+DEBUG: board_modifier.py:132: Getting SW7 footprint position: (95250000, 38100000)
+DEBUG: board_modifier.py:119: Setting D4 footprint position: (100330000, 42100000)
+DEBUG: board_modifier.py:132: Getting SW8 footprint position: (38100000, 57150000)
+DEBUG: board_modifier.py:119: Setting D5 footprint position: (43180000, 61150000)
+DEBUG: board_modifier.py:132: Getting SW9 footprint position: (57150000, 57150000)
+DEBUG: board_modifier.py:119: Setting D6 footprint position: (62230000, 61150000)
+DEBUG: board_modifier.py:132: Getting SW10 footprint position: (76200000, 57150000)
+DEBUG: board_modifier.py:119: Setting D7 footprint position: (81280000, 61150000)
+DEBUG: board_modifier.py:132: Getting SW11 footprint position: (95250000, 57150000)
+DEBUG: board_modifier.py:119: Setting D8 footprint position: (100330000, 61150000)
+DEBUG: board_modifier.py:132: Getting SW12 footprint position: (38100000, 76200000)
+DEBUG: board_modifier.py:119: Setting D9 footprint position: (43180000, 80200000)
+DEBUG: board_modifier.py:132: Getting SW13 footprint position: (57150000, 76200000)
+DEBUG: board_modifier.py:119: Setting D10 footprint position: (62230000, 80200000)
+DEBUG: board_modifier.py:132: Getting SW14 footprint position: (76200000, 76200000)
+DEBUG: board_modifier.py:119: Setting D11 footprint position: (81280000, 80200000)
+DEBUG: board_modifier.py:132: Getting SW15 footprint position: (95250000, 76200000)
+DEBUG: board_modifier.py:119: Setting D12 footprint position: (100330000, 80200000)
+DEBUG: board_modifier.py:132: Getting SW16 footprint position: (38100000, 95250000)
+DEBUG: board_modifier.py:119: Setting D13 footprint position: (43180000, 99250000)
+DEBUG: board_modifier.py:132: Getting SW17 footprint position: (57150000, 95250000)
+DEBUG: board_modifier.py:119: Setting D14 footprint position: (62230000, 99250000)
+DEBUG: board_modifier.py:132: Getting SW18 footprint position: (76200000, 95250000)
+DEBUG: board_modifier.py:119: Setting D15 footprint position: (81280000, 99250000)
+DEBUG: board_modifier.py:132: Getting SW19 footprint position: (95250000, 95250000)
+DEBUG: board_modifier.py:119: Setting D16 footprint position: (100330000, 99250000)
+INFO: key_placer.py:979: Placing additional elements for SW2
+DEBUG: board_modifier.py:132: Getting SW2 footprint position: (109855000, 50372000)
+DEBUG: board_modifier.py:84: Searching for optional ST2 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW3
+DEBUG: board_modifier.py:132: Getting SW3 footprint position: (130810000, 50372000)
+DEBUG: board_modifier.py:84: Searching for optional ST3 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW1
+DEBUG: board_modifier.py:132: Getting SW1 footprint position: (119115000, 87035000)
+DEBUG: board_modifier.py:84: Searching for optional ST1 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW15
+DEBUG: board_modifier.py:132: Getting SW15 footprint position: (95250000, 76200000)
+DEBUG: board_modifier.py:84: Searching for optional ST15 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW10
+DEBUG: board_modifier.py:132: Getting SW10 footprint position: (76200000, 57150000)
+DEBUG: board_modifier.py:84: Searching for optional ST10 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW7
+DEBUG: board_modifier.py:132: Getting SW7 footprint position: (95250000, 38100000)
+DEBUG: board_modifier.py:84: Searching for optional ST7 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW8
+DEBUG: board_modifier.py:132: Getting SW8 footprint position: (38100000, 57150000)
+DEBUG: board_modifier.py:84: Searching for optional ST8 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW19
+DEBUG: board_modifier.py:132: Getting SW19 footprint position: (95250000, 95250000)
+DEBUG: board_modifier.py:84: Searching for optional ST19 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW13
+DEBUG: board_modifier.py:132: Getting SW13 footprint position: (57150000, 76200000)
+DEBUG: board_modifier.py:84: Searching for optional ST13 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW12
+DEBUG: board_modifier.py:132: Getting SW12 footprint position: (38100000, 76200000)
+DEBUG: board_modifier.py:84: Searching for optional ST12 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW17
+DEBUG: board_modifier.py:132: Getting SW17 footprint position: (57150000, 95250000)
+DEBUG: board_modifier.py:84: Searching for optional ST17 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW6
+DEBUG: board_modifier.py:132: Getting SW6 footprint position: (76200000, 38100000)
+DEBUG: board_modifier.py:84: Searching for optional ST6 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW18
+DEBUG: board_modifier.py:132: Getting SW18 footprint position: (76200000, 95250000)
+DEBUG: board_modifier.py:84: Searching for optional ST18 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW4
+DEBUG: board_modifier.py:132: Getting SW4 footprint position: (38100000, 38100000)
+DEBUG: board_modifier.py:84: Searching for optional ST4 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW5
+DEBUG: board_modifier.py:132: Getting SW5 footprint position: (57150000, 38100000)
+DEBUG: board_modifier.py:84: Searching for optional ST5 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW9
+DEBUG: board_modifier.py:132: Getting SW9 footprint position: (57150000, 57150000)
+DEBUG: board_modifier.py:84: Searching for optional ST9 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW16
+DEBUG: board_modifier.py:132: Getting SW16 footprint position: (38100000, 95250000)
+DEBUG: board_modifier.py:84: Searching for optional ST16 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW14
+DEBUG: board_modifier.py:132: Getting SW14 footprint position: (76200000, 76200000)
+DEBUG: board_modifier.py:84: Searching for optional ST14 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:979: Placing additional elements for SW11
+DEBUG: board_modifier.py:132: Getting SW11 footprint position: (95250000, 57150000)
+DEBUG: board_modifier.py:84: Searching for optional ST11 footprint in /home/neckles/Documents/novakey/novakey.kicad_pcb
+DEBUG: board_modifier.py:89: Footprint not found
+INFO: key_placer.py:512: Routing SW15 with D12
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW15:2' at (97790000, 71120000) with pad 'D12:2' at (100330000, 72580000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(97790000, 71120000), (98870000, 71120000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(98870000, 71120000), (100330000, 72580000)]
+INFO: key_placer.py:512: Routing SW10 with D7
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW10:2' at (78740000, 52070000) with pad 'D7:2' at (81280000, 53530000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(78740000, 52070000), (79820000, 52070000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(79820000, 52070000), (81280000, 53530000)]
+INFO: key_placer.py:512: Routing SW7 with D4
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW7:2' at (97790000, 33020000) with pad 'D4:2' at (100330000, 34480000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(97790000, 33020000), (98870000, 33020000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(98870000, 33020000), (100330000, 34480000)]
+INFO: key_placer.py:512: Routing SW8 with D5
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW8:2' at (40640000, 52070000) with pad 'D5:2' at (43180000, 53530000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(40640000, 52070000), (41720000, 52070000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(41720000, 52070000), (43180000, 53530000)]
+INFO: key_placer.py:512: Routing SW19 with D16
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW19:2' at (97790000, 90170000) with pad 'D16:2' at (100330000, 91630000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(97790000, 90170000), (98870000, 90170000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(98870000, 90170000), (100330000, 91630000)]
+INFO: key_placer.py:512: Routing SW13 with D10
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW13:2' at (59690000, 71120000) with pad 'D10:2' at (62230000, 72580000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(59690000, 71120000), (60770000, 71120000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(60770000, 71120000), (62230000, 72580000)]
+INFO: key_placer.py:512: Routing SW12 with D9
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW12:2' at (40640000, 71120000) with pad 'D9:2' at (43180000, 72580000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(40640000, 71120000), (41720000, 71120000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(41720000, 71120000), (43180000, 72580000)]
+INFO: key_placer.py:512: Routing SW17 with D14
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW17:2' at (59690000, 90170000) with pad 'D14:2' at (62230000, 91630000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(59690000, 90170000), (60770000, 90170000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(60770000, 90170000), (62230000, 91630000)]
+INFO: key_placer.py:512: Routing SW6 with D3
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW6:2' at (78740000, 33020000) with pad 'D3:2' at (81280000, 34480000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(78740000, 33020000), (79820000, 33020000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(79820000, 33020000), (81280000, 34480000)]
+INFO: key_placer.py:512: Routing SW18 with D15
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW18:2' at (78740000, 90170000) with pad 'D15:2' at (81280000, 91630000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(78740000, 90170000), (79820000, 90170000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(79820000, 90170000), (81280000, 91630000)]
+INFO: key_placer.py:512: Routing SW4 with D1
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW4:2' at (40640000, 33020000) with pad 'D1:2' at (43180000, 34480000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(40640000, 33020000), (41720000, 33020000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(41720000, 33020000), (43180000, 34480000)]
+INFO: key_placer.py:512: Routing SW5 with D2
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW5:2' at (59690000, 33020000) with pad 'D2:2' at (62230000, 34480000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(59690000, 33020000), (60770000, 33020000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(60770000, 33020000), (62230000, 34480000)]
+INFO: key_placer.py:512: Routing SW9 with D6
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW9:2' at (59690000, 52070000) with pad 'D6:2' at (62230000, 53530000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(59690000, 52070000), (60770000, 52070000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(60770000, 52070000), (62230000, 53530000)]
+INFO: key_placer.py:512: Routing SW16 with D13
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW16:2' at (40640000, 90170000) with pad 'D13:2' at (43180000, 91630000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(40640000, 90170000), (41720000, 90170000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(41720000, 90170000), (43180000, 91630000)]
+INFO: key_placer.py:512: Routing SW14 with D11
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW14:2' at (78740000, 71120000) with pad 'D11:2' at (81280000, 72580000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(78740000, 71120000), (79820000, 71120000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(79820000, 71120000), (81280000, 72580000)]
+INFO: key_placer.py:512: Routing SW11 with D8
+INFO: key_placer.py:514: Using internal autorouter method
+DEBUG: board_modifier.py:591: Routing at F.Cu layer
+DEBUG: board_modifier.py:608: Netclass: Default, track width: 200000
+INFO: board_modifier.py:674: Routing pad 'SW11:2' at (97790000, 52070000) with pad 'D8:2' at (100330000, 53530000) using coordinate system rotated by 0 degree(s)
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(97790000, 52070000), (98870000, 52070000)]
+INFO: board_modifier.py:494: Adding track segment (F.Cu): [(98870000, 52070000), (100330000, 53530000)]
+INFO: key_placer.py:546: Removing dangling tracks
+INFO: key_placer.py:561: Removing 0c1b9265-75c6-444f-af0d-06ef1256a134
+INFO: key_placer.py:561: Removing 0f55d9a4-3cd4-4647-981d-5e89fd4c2fd6
+INFO: key_placer.py:561: Removing 140e35d5-b7c1-4ee3-b1a7-55f8c31087e7
+INFO: key_placer.py:561: Removing 145bd852-d596-4831-aff9-224e15c0b92d
+INFO: key_placer.py:561: Removing 167cd91a-83da-4f99-8a2d-8d1fe84786cf
+INFO: key_placer.py:561: Removing 2387cd29-62f7-404b-972c-792603910e3b
+INFO: key_placer.py:561: Removing 25ed429c-88aa-48f0-8473-157a018e7b08
+INFO: key_placer.py:561: Removing 26ed52d9-db2c-457d-839f-a10465ad33b3
+INFO: key_placer.py:561: Removing 37959274-521d-4ceb-bf03-fc43b6a435e0
+INFO: key_placer.py:561: Removing 3f2c5387-7ee8-455c-9d8c-b764e46091d7
+INFO: key_placer.py:561: Removing 5b987ad2-62e2-464b-93c9-07b77b8d7509
+INFO: key_placer.py:561: Removing 5d64e74d-5567-48f2-9c09-55ca7fb949a9
+INFO: key_placer.py:561: Removing 7250902a-7b73-448c-a2fc-fda582aa75fe
+INFO: key_placer.py:561: Removing 76c810fc-5db7-48d3-8673-f2a858ca4995
+INFO: key_placer.py:561: Removing 7768798a-0187-4c8d-9de8-2594866d8c2a
+INFO: key_placer.py:561: Removing 7eff5374-9ff7-44af-9e56-6d6c564aecd9
+INFO: key_placer.py:561: Removing 84bc4805-fcf2-4045-9b31-384511aebab9
+INFO: key_placer.py:561: Removing 88eb0173-4174-424b-a6fb-c60bffb19298
+INFO: key_placer.py:561: Removing 8f01eccd-ad1c-4085-b1f6-700cd4ade609
+INFO: key_placer.py:561: Removing 8fea25f6-ceac-4efa-85c6-483331442ec6
+INFO: key_placer.py:561: Removing 90a42fdf-abf4-4df6-a268-779d18029933
+INFO: key_placer.py:561: Removing 90f54536-1b11-4d9e-9d4c-8602c1fae076
+INFO: key_placer.py:561: Removing 95d1627d-7f6d-4999-9731-1c0aa8453310
+INFO: key_placer.py:561: Removing 975ca8eb-f111-416c-8eef-a3f0fa708b95
+INFO: key_placer.py:561: Removing 99b68204-b763-4e3d-90e2-e6812d035d65
+INFO: key_placer.py:561: Removing b80018bf-8209-4f8a-a8bb-3cb6034ae456
+INFO: key_placer.py:561: Removing bc017b23-eab5-484d-b1e2-188f71313180
+INFO: key_placer.py:561: Removing c5ef92c2-eaf8-4082-9d23-0bc5df3afe10
+INFO: key_placer.py:561: Removing d05793f2-20be-42cc-877f-57c61377884e
+INFO: key_placer.py:561: Removing d546985e-c481-4fe4-8a08-48d0f19b1abd
+INFO: key_placer.py:561: Removing d5bba1f5-a978-46ce-a145-146340abcec2
+INFO: key_placer.py:561: Removing d5c9ac59-c94e-4089-80c6-6e0bcbd171c3
+INFO: key_placer.py:561: Removing e0286e0f-e935-48bc-a7e5-abaeab10edbc
+INFO: key_placer.py:561: Removing e17b3c66-e121-4d78-8ed8-fa4fd262bf3f
+INFO: key_placer.py:561: Removing e3863682-3b53-45f8-a1f1-2810590386da
+INFO: key_placer.py:561: Removing e645c96c-62bb-43b6-b59c-0d4ba20bd344
+INFO: key_placer.py:561: Removing ea43ad3c-a5a3-43f1-83ce-4976c0aa7521
+INFO: key_placer.py:561: Removing f3e6fb00-81ce-44ff-8401-21c2be548de9
+INFO: key_placer.py:561: Removing fc140671-7983-4f28-9fd4-881588888198
+INFO: key_placer.py:561: Removing ff6c0743-a517-46c9-8d37-56f0c736b5a1
+INFO: key_placer.py:561: Removing 23455bfb-5e4e-41cc-b8bd-d293f6698b03
+INFO: key_placer.py:561: Removing 51b75cb5-1acc-49c2-80e0-25d1030a6094
+INFO: key_placer.py:561: Removing 55829cd9-7f59-463b-96df-c686dc6942b3
+INFO: key_placer.py:561: Removing 779363bd-73a4-4ce8-9704-55249ef916ae
+INFO: key_placer.py:561: Removing a8caa563-08b8-43cc-8494-048035690702
+INFO: key_placer.py:561: Removing eab5a531-74ec-4654-b061-146621f44522
+INFO: key_placer.py:561: Removing 04a08736-2092-4656-97c9-27f72375c3b1
+INFO: key_placer.py:561: Removing 343e3379-57e7-4be7-ad85-69cd0342c302
+INFO: key_placer.py:561: Removing 7a687f47-da23-4914-8886-a2f3f24241ee
+INFO: key_placer.py:561: Removing b7f91428-2ada-43b1-99a4-8aad18aa4a52
+INFO: key_placer.py:561: Removing 489a6bb4-bc35-4d5f-a6d4-5c56ea61f761
+INFO: key_placer.py:561: Removing 3df4b36b-873c-46b8-9424-ebe3b03f4a37

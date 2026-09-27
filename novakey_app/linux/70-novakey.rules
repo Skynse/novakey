@@ -1,0 +1,2 @@
+# Allow the active desktop user to access NovaKey's raw HID interface.
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="feed", ATTRS{idProduct}=="4e4b", TAG+="uaccess", ENV{ID_NOVAKEY}="1"

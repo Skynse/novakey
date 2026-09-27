@@ -1,0 +1,10 @@
+[tasks.build]
+description = "Build the NovaKey RMK firmware and produce build/novakey.uf2"
+command = "bash"
+args = ["./build.sh"]
+
+[tasks.flash]
+description = "Build and flash over SWD with probe-rs"
+command = "cargo"
+args = ["run", "--release"]
+dependencies = ["build"]

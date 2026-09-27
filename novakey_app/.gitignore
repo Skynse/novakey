@@ -1,0 +1,43 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub/
+.pub-cache/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+coverage/
+
+# Generated platform files
+android/.gradle/
+android/local.properties
+ios/Flutter/.last_build_id
+macos/Flutter/ephemeral/
+linux/flutter/ephemeral/
+windows/flutter/ephemeral/
+
+# IDE state
+.idea/
+*.iml
+.vscode/
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Local profile data and logs
+*.log
+.env
+.env.*
+!.env.example
+novakey_profiles.json
+profiles.json
+
+# Native release packaging
+*.AppImage
+*.dmg
+*.deb
+*.exe
+*.msix
+*.snap
+*.tar.gz

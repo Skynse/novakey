@@ -13,7 +13,10 @@ use rmk::input_device::rotary_encoder::Direction;
 use rmk::macros::input_device;
 
 const ENCODER_COUNT: usize = 3;
-const RESOLUTION: i8 = 2;
+// Transitions per physical detent. Encoder 2 produces a full four-edge
+// cycle; half-cycle decoding emitted two taps for each click. Keep the
+// existing calibration for encoders 1 and 3 until measured independently.
+const RESOLUTION: [i8; ENCODER_COUNT] = [2, 4, 2];
 const STABLE_SAMPLES: u8 = 2;
 const TRANSITION: [i8; 16] = [0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0];
 
@@ -74,10 +77,10 @@ impl Encoders {
         }
 
         self.pulses[index] += pulse;
-        if self.pulses[index] >= RESOLUTION {
+        if self.pulses[index] >= RESOLUTION[index] {
             self.pulses[index] = 0;
             Direction::CounterClockwise
-        } else if self.pulses[index] <= -RESOLUTION {
+        } else if self.pulses[index] <= -RESOLUTION[index] {
             self.pulses[index] = 0;
             Direction::Clockwise
         } else {

@@ -1,22 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:flutter/widgets.dart';
 
-import 'studio/studio_screen.dart';
-import 'theme/novakey_theme.dart';
+import 'hud/studio_windows.dart';
+export 'hud/studio_windows.dart' show NovaKeyApp;
 
-class NovaKeyApp extends StatelessWidget {
-  const NovaKeyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) => ShadApp(
-    debugShowCheckedModeBanner: false,
-    title: 'NovaKey Studio',
-    themeMode: ThemeMode.dark,
-    darkTheme: novaKeyTheme(),
-    home: Theme(data: novaKeyMaterialTheme(), child: const StudioScreen()),
-  );
-}
-
-void main() {
-  runApp(NovaKeyApp());
+void main(List<String> args) {
+  WidgetsFlutterBinding.ensureInitialized();
+  runWidget(NovaKeyApp(showHud: args.contains('--hud')));
 }

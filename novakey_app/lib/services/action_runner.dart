@@ -4,74 +4,74 @@ import 'dart:io';
 import '../models/control_binding.dart';
 import '../models/profile.dart';
 import 'device_service.dart';
+import 'combination_resolver.dart';
 
-/// Resolves held-control combinations and serializes macro execution.
+/// Executes resolved holds and serializes macro playback.
 class ActionRunner {
-  ActionRunner(this.device, {required this.onError});
+  ActionRunner(
+    this.device, {
+    required this.onError,
+    this.onHud,
+    this.onResetHud,
+  });
+  final void Function(String, bool)? onHud;
+  final void Function()? onResetHud;
   final DeviceService device;
   final void Function(String) onError;
   Profile? profile;
-  final Set<String> _pressed = {};
-  final Set<String> _usedAsModifier = {};
-  final Map<String, ControlBinding> _active = {};
+  late final _inputs = CombinationResolver(
+    onDown: (binding) {
+      if (binding.kind == ActionKind.hud) {
+        onHud?.call(binding.detail, true);
+      } else if (binding.kind == ActionKind.shortcut) {
+        _hold(binding, true);
+      } else {
+        _enqueue(() => _execute(binding));
+      }
+    },
+    onUp: (binding) {
+      if (binding.kind == ActionKind.hud) onHud?.call(binding.detail, false);
+      if (binding.kind == ActionKind.shortcut) _hold(binding, false);
+    },
+    onTap: (binding, valid) => _enqueue(() async {
+      if (valid()) await _execute(binding);
+    }),
+  );
   Future<void> _work = Future.value();
   int _generation = 0, _pending = 0;
   Completer<void> _cancel = Completer<void>();
-  bool get busy => _pending > 0 || _pressed.isNotEmpty;
+  bool get busy => _pending > 0 || _inputs.busy;
   void event(DeviceEvent event) {
     if (!device.running || profile == null) return;
     final p = profile!;
     if (event.pressed) {
-      if (!_pressed.add(event.id)) return;
-      ControlBinding? binding;
-      for (final combo in p.combinations.reversed) {
-        if (combo.trigger == event.id && _pressed.contains(combo.held)) {
-          binding = combo.binding;
-          _usedAsModifier.add(combo.held);
-          break;
-        }
-      }
-      final isModifier = p.combinations.any((c) => c.held == event.id);
-      if (binding == null && isModifier) {
-        return; // Tap executes on release; hold modifies other controls.
-      }
-      binding ??= p.bindings[event.id] ?? unassigned;
-      _active[event.id] = binding;
-      if (binding.kind == ActionKind.shortcut) {
-        final b = binding;
-        _hold(b, true);
-      } else {
-        _enqueue(() => _execute(binding!));
-      }
+      _inputs.press(
+        event.id,
+        p.bindings[event.id] ?? unassigned,
+        p.combinations,
+      );
     } else {
-      _pressed.remove(event.id);
-      final active = _active.remove(event.id);
-      if (active?.kind == ActionKind.shortcut) {
-        _hold(active!, false);
-      } else if (active == null &&
-          p.combinations.any((c) => c.held == event.id)) {
-        if (!_usedAsModifier.remove(event.id)) {
-          _enqueue(() => _execute(p.bindings[event.id] ?? unassigned));
-        }
-      }
+      _inputs.release(event.id);
     }
   }
 
-  void _hold(ControlBinding b, bool down) {
+  void _hold(ControlBinding binding, bool down) {
     unawaited(
-      device.output(b.keyCode, b.modifiers, down).catchError((Object e) {
+      device.output(binding.keyCode, binding.modifiers, down).catchError((
+        Object e,
+      ) {
         onError(e.toString());
         unawaited(stop());
       }),
     );
   }
 
-  void _enqueue(Future<void> Function() action) {
+  Future<void> _enqueue(Future<void> Function() action) {
     final generation = _generation;
     if (_pending >= 128) {
       onError('Action queue full. Stop playback to clear it.');
       unawaited(stop());
-      return;
+      return Future.value();
     }
     _pending++;
     _work = _work
@@ -83,6 +83,7 @@ class ActionRunner {
           await stop();
         })
         .whenComplete(() => _pending--);
+    return _work;
   }
 
   Future<void> preview(ControlBinding b) async {
@@ -103,6 +104,9 @@ class ActionRunner {
   Future<void> _execute(ControlBinding b) async {
     final generation = _generation;
     switch (b.kind) {
+      case ActionKind.hud:
+        onHud?.call('toggle', true);
+        return;
       case ActionKind.none:
         return;
       case ActionKind.shortcut:
@@ -162,9 +166,8 @@ class ActionRunner {
     _generation++;
     if (!_cancel.isCompleted) _cancel.complete();
     _cancel = Completer<void>();
-    _pressed.clear();
-    _usedAsModifier.clear();
-    _active.clear();
+    _inputs.reset();
+    onResetHud?.call();
     if (device.connected) {
       try {
         await device.release();

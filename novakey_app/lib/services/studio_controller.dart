@@ -11,10 +11,16 @@ import 'profile_store.dart';
 import 'device_service.dart';
 import 'action_runner.dart';
 import 'application_monitor.dart';
+import '../hud/hud_controller.dart';
 
 class StudioController extends ChangeNotifier {
   StudioController() {
-    runner = ActionRunner(device, onError: report);
+    runner = ActionRunner(
+      device,
+      onError: report,
+      onHud: hud.action,
+      onResetHud: hud.releasePeeks,
+    );
     device.addListener(_deviceChanged);
     _events = device.events.stream.listen((e) {
       lastControl = e.id;
@@ -22,9 +28,10 @@ class StudioController extends ChangeNotifier {
         selected = e.id;
         notifyListeners();
       }
-      runner.event(e);
+      if (!learn) runner.event(e);
     });
   }
+  late final hud = HudController(onError: report);
   final store = ProfileStore();
   final monitor = ApplicationMonitor();
   bool autoSwitch = false;
@@ -99,6 +106,7 @@ class StudioController extends ChangeNotifier {
     }
     if (!profiles.any((p) => p.id == activeId)) activeId = profiles.first.id;
     runner.profile = active;
+    device.startAutoReconnect();
     loading = false;
     notifyListeners();
     if (restoreAutoSwitch && ApplicationMonitor.supported) {
@@ -293,6 +301,8 @@ class StudioController extends ChangeNotifier {
     unawaited(monitor.stop().catchError((_) {}));
     device.removeListener(_deviceChanged);
     _events.cancel();
+    hud.dispose();
+    unawaited(runner.stop());
     device.dispose();
     super.dispose();
   }

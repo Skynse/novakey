@@ -1,5 +1,6 @@
 #include "my_application.h"
 #include "kwin_bridge.h"
+#include "hud_window.h"
 
 #include <flutter_linux/flutter_linux.h>
 #ifdef GDK_WINDOWING_X11
@@ -12,6 +13,7 @@ struct _MyApplication {
   GtkApplication parent_instance;
   char** dart_entrypoint_arguments;
   NovaKeyKWinBridge* kwin_bridge;
+  NovaKeyHudWindow* hud;
 };
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
@@ -78,6 +80,7 @@ static void my_application_activate(GApplication* application) {
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
   self->kwin_bridge = novakey_kwin_bridge_new(fl_engine_get_binary_messenger(fl_view_get_engine(view)));
 
+  self->hud = novakey_hud_window_new(fl_view_get_engine(view));
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
 
@@ -123,6 +126,8 @@ static void my_application_shutdown(GApplication* application) {
 // Implements GObject::dispose.
 static void my_application_dispose(GObject* object) {
   MyApplication* self = MY_APPLICATION(object);
+  novakey_hud_window_free(self->hud);
+  self->hud = nullptr;
   novakey_kwin_bridge_free(self->kwin_bridge);
   self->kwin_bridge = nullptr;
   g_clear_pointer(&self->dart_entrypoint_arguments, g_strfreev);

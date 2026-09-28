@@ -16,6 +16,20 @@ class DeviceEvent {
 }
 
 class DeviceService extends ChangeNotifier {
+  DeviceService({this.reconnectInterval = const Duration(seconds: 3)})
+    : assert(reconnectInterval > Duration.zero);
+
+  final Duration reconnectInterval;
+  Timer? _reconnect;
+
+  void startAutoReconnect() {
+    if (_disposed || !Platform.isLinux || _reconnect != null) return;
+    _reconnect = Timer.periodic(reconnectInterval, (_) {
+      if (!connected && !connecting) unawaited(connect());
+    });
+    unawaited(connect());
+  }
+
   bool _disposed = false;
   Process? _process;
   Timer? _heartbeat;
@@ -26,7 +40,7 @@ class DeviceService extends ChangeNotifier {
   String status = 'Not connected';
   final events = StreamController<DeviceEvent>.broadcast();
   Future<void> connect() async {
-    if (connecting || connected) return;
+    if (_disposed || connecting || connected) return;
     connecting = true;
     status = 'Looking for NovaKey…';
     notifyListeners();
@@ -41,25 +55,38 @@ class DeviceService extends ChangeNotifier {
       await bridge.writeAsString(
         await rootBundle.loadString('assets/hid_bridge.py'),
       );
+      if (_disposed) return;
       final ready = Completer<void>();
       final process = await Process.start('python3', ['-u', bridge.path]);
+      if (_disposed) {
+        process.kill();
+        return;
+      }
       _process = process;
       process.stdout
           .transform(utf8.decoder)
           .transform(const LineSplitter())
-          .listen((line) {
-            final msg = jsonDecode(line) as Map<String, dynamic>;
-            if (msg['ready'] == true && !ready.isCompleted) ready.complete();
-            if (msg['error'] != null) {
-              final error = StateError(msg['error']);
-              if (!ready.isCompleted) {
-                ready.completeError(error);
-              } else {
-                _lost(error.toString());
+          .listen(
+            (line) {
+              if (_disposed || !identical(_process, process)) return;
+              final msg = jsonDecode(line) as Map<String, dynamic>;
+              if (msg['ready'] == true && !ready.isCompleted) ready.complete();
+              if (msg['error'] != null) {
+                final error = StateError(msg['error']);
+                if (!ready.isCompleted) {
+                  ready.completeError(error);
+                } else {
+                  _lost(error.toString());
+                }
               }
-            }
-            if (msg['packet'] is List) _receive(List<int>.from(msg['packet']));
-          }, onError: (Object e) => _lost(e.toString()));
+              if (msg['packet'] is List) {
+                _receive(List<int>.from(msg['packet']));
+              }
+            },
+            onError: (Object e) {
+              if (identical(_process, process)) _lost(e.toString());
+            },
+          );
       process.stderr.drain<void>();
       unawaited(
         process.exitCode.then((_) {
@@ -76,13 +103,14 @@ class DeviceService extends ChangeNotifier {
           'Firmware update required: install the new NovaKey protocol 3 UF2.',
         );
       }
+      if (_disposed || !identical(_process, process)) return;
       connected = true;
       status = 'NovaKey • protocol 3';
       _heartbeat = Timer.periodic(const Duration(seconds: 1), (_) {
         if (connected) {
           unawaited(
             request(1).catchError((Object e) {
-              _lost(e.toString());
+              if (identical(_process, process)) _lost(e.toString());
               return <int>[];
             }),
           );
@@ -92,7 +120,7 @@ class DeviceService extends ChangeNotifier {
       _lost(e.toString());
     }
     connecting = false;
-    notifyListeners();
+    if (!_disposed) notifyListeners();
   }
 
   void _receive(List<int> p) {
@@ -120,9 +148,12 @@ class DeviceService extends ChangeNotifier {
 
   Future<List<int>> request(int command, [List<int> payload = const []]) {
     final result = Completer<List<int>>();
+    final process = _process;
     _queue = _queue.catchError((_) {}).then((_) async {
       try {
-        if (_process == null) throw StateError('No device connected.');
+        if (_disposed || process == null || !identical(_process, process)) {
+          throw StateError('Device connection changed.');
+        }
         final packet = List<int>.filled(32, 0);
         packet[0] = 78;
         packet[1] = 75;
@@ -130,13 +161,15 @@ class DeviceService extends ChangeNotifier {
         packet.setRange(4, 4 + payload.length, payload);
         _command = command;
         _reply = Completer<List<int>>();
-        _process!.stdin.writeln(jsonEncode({'packet': packet}));
-        await _process!.stdin.flush();
+        process.stdin.writeln(jsonEncode({'packet': packet}));
+        await process.stdin.flush();
         final reply = await _reply!.future.timeout(const Duration(seconds: 2));
         result.complete(reply);
       } catch (e, st) {
         result.completeError(e, st);
-        _lost('HID request failed: $e');
+        if (process != null && identical(_process, process)) {
+          _lost('HID request failed: $e');
+        }
       } finally {
         _reply = null;
         _command = null;
@@ -146,7 +179,9 @@ class DeviceService extends ChangeNotifier {
   }
 
   Future<void> capture(bool enabled) async {
+    final process = _process;
     await request(0x10, [enabled ? 1 : 0]);
+    if (_disposed || !identical(_process, process)) return;
     running = enabled;
     notifyListeners();
   }
@@ -206,6 +241,7 @@ class DeviceService extends ChangeNotifier {
   @override
   void dispose() {
     _disposed = true;
+    _reconnect?.cancel();
     _heartbeat?.cancel();
     _process?.kill();
     events.close();

@@ -27,12 +27,12 @@ class _CombinationDialogState extends State<CombinationDialog> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Hold one control, then press or turn another. The held control’s own action fires on release only if no combination was used.',
+            'Press both controls in either order. Use On release (UP) for individual bindings you want suppressed by combinations. Immediate bindings start right away. A combination ends when either control is released.',
           ),
           const SizedBox(height: 20),
           DropdownButtonFormField<String>(
             initialValue: held,
-            decoration: const InputDecoration(labelText: 'While holding'),
+            decoration: const InputDecoration(labelText: 'First control'),
             items: [
               for (final c in controls.where(
                 (c) =>
@@ -47,7 +47,7 @@ class _CombinationDialogState extends State<CombinationDialog> {
           DropdownButtonFormField<String>(
             initialValue: trigger,
             isExpanded: true,
-            decoration: const InputDecoration(labelText: 'Press or turn'),
+            decoration: const InputDecoration(labelText: 'Combine with'),
             items: [
               for (final c in controls)
                 DropdownMenuItem(

@@ -130,6 +130,11 @@ class ProfileStore {
   }
 
   static void checkBinding(ControlBinding b) {
+    if (b.kind == ActionKind.hud &&
+        (!['peek', 'toggle'].contains(b.detail) ||
+            b.activationMode != ActivationMode.immediate)) {
+      throw const FormatException('Invalid HUD action.');
+    }
     if (b.keyCode < 0 ||
         b.keyCode > 255 ||
         b.modifiers < 0 ||

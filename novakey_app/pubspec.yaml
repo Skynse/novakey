@@ -63,6 +63,7 @@ flutter:
     - assets/keycap.svg
     - assets/hid_bridge.py
     - assets/kwin_focus.js
+    - assets/kwin_hud.js
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/control_binding.dart';
 import '../data/preset_bindings.dart';
 import 'shortcut_recorder.dart';
+import 'activation_mode_picker.dart';
 import 'step_dialog.dart';
 
 Future<ControlBinding?> editBinding(
@@ -47,7 +48,7 @@ class _BindingEditorState extends State<BindingEditor> {
 
   void update(ControlBinding b) {
     setState(() {
-      binding = b;
+      binding = b.copyWith(activationMode: binding.activationMode);
       name.text = b.name;
     });
   }
@@ -92,6 +93,14 @@ class _BindingEditorState extends State<BindingEditor> {
             ),
           ),
           const SizedBox(height: 18),
+          if (binding.kind != ActionKind.hud)
+            ActivationModePicker(
+              value: binding.activationMode,
+              onChanged: (mode) => setState(
+                () => binding = binding.copyWith(activationMode: mode),
+              ),
+            ),
+          const SizedBox(height: 18),
           SegmentedButton<ActionKind>(
             segments: const [
               ButtonSegment(
@@ -106,14 +115,22 @@ class _BindingEditorState extends State<BindingEditor> {
                 value: ActionKind.system,
                 label: Text('File / URL'),
               ),
+              ButtonSegment(value: ActionKind.hud, label: Text('HUD')),
             ],
             selected: {
               binding.kind == ActionKind.none
                   ? ActionKind.shortcut
                   : binding.kind,
             },
-            onSelectionChanged: (v) =>
-                setState(() => binding = binding.copyWith(kind: v.first)),
+            onSelectionChanged: (v) => setState(
+              () => binding = binding.copyWith(
+                kind: v.first,
+                activationMode: v.first == ActionKind.hud
+                    ? ActivationMode.immediate
+                    : binding.activationMode,
+                detail: v.first == ActionKind.hud ? 'peek' : binding.detail,
+              ),
+            ),
           ),
           const SizedBox(height: 18),
           if (binding.kind == ActionKind.shortcut ||
@@ -159,6 +176,22 @@ class _BindingEditorState extends State<BindingEditor> {
                 trailing: Text(preset.detail),
                 onTap: () => update(preset),
               ),
+          ],
+          if (binding.kind == ActionKind.hud) ...[
+            DropdownButtonFormField<String>(
+              initialValue: binding.detail == 'toggle' ? 'toggle' : 'peek',
+              decoration: const InputDecoration(labelText: 'Bindings HUD'),
+              items: const [
+                DropdownMenuItem(value: 'peek', child: Text('Hold to peek')),
+                DropdownMenuItem(value: 'toggle', child: Text('Toggle HUD')),
+              ],
+              onChanged: (value) =>
+                  setState(() => binding = binding.copyWith(detail: value)),
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              'Shows the active profile above your application. Hold to peek dismisses on release. Toggle is useful for encoder turns. Requires Studio on KDE Linux.',
+            ),
           ],
           if (binding.kind == ActionKind.system) ...[
             TextField(
@@ -243,7 +276,9 @@ class _BindingEditorState extends State<BindingEditor> {
                   context,
                   binding.copyWith(
                     name: name.text.trim().isEmpty
-                        ? 'Custom action'
+                        ? (binding.kind == ActionKind.hud
+                              ? 'Bindings HUD'
+                              : 'Custom action')
                         : name.text.trim(),
                     detail: binding.kind == ActionKind.system
                         ? target.text.trim()

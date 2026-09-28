@@ -19,25 +19,15 @@ import 'firmware_dialog.dart';
 import 'studio_chrome.dart';
 
 class StudioScreen extends StatefulWidget {
-  const StudioScreen({super.key});
+  const StudioScreen({super.key, required this.controller});
+  final StudioController controller;
   @override
   State<StudioScreen> createState() => _StudioScreenState();
 }
 
 class _StudioScreenState extends State<StudioScreen> {
-  final controller = StudioController();
+  StudioController get controller => widget.controller;
   bool debugMode = false;
-  @override
-  void initState() {
-    super.initState();
-    unawaited(controller.initialize());
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
 
   Future<void> edit(String id) async {
     controller.select(id);

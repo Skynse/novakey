@@ -34,6 +34,13 @@ class StudioHeader extends StatelessWidget {
       children: [
         const SizedBox(width: 10),
         const Spacer(),
+        ShadButton.outline(
+          size: ShadButtonSize.sm,
+          onPressed: controller.hud.toggle,
+          leading: const Icon(Icons.view_list_outlined, size: 16),
+          child: const Text('Bindings HUD'),
+        ),
+        const SizedBox(width: 12),
         ShadBadge.outline(
           foregroundColor: controller.device.connected ? positive : muted,
           backgroundColor: controller.device.connected

@@ -57,7 +57,7 @@ class StudioController extends ChangeNotifier {
   }
 
   Map<String, dynamic> get document => {
-    'version': 2,
+    'version': 4,
     'active': activeId,
     'autoSwitch': autoSwitch,
     'profiles': profiles.map((p) => p.toJson()).toList(),
@@ -270,6 +270,7 @@ class StudioController extends ChangeNotifier {
   Future<void> importFrom(String path) async {
     final doc =
         jsonDecode(await File(path).readAsString()) as Map<String, dynamic>;
+    ProfileStore.migrate(doc);
     ProfileStore.validate(doc);
     final imported = (doc['profiles'] as List)
         .map((p) => Profile.fromJson(Map<String, dynamic>.from(p)))

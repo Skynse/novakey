@@ -12,12 +12,28 @@ class ProfileStore {
   Future<Map<String, dynamic>?> load() async {
     if (!await file.exists()) return null;
     final data = jsonDecode(await file.readAsString()) as Map<String, dynamic>;
+    final oldVersion = data['version'];
     migrate(data);
     validate(data);
+    if (oldVersion != data['version']) {
+      final backup = File('${file.path}.before-firmware-orientation-v4');
+      if (!await backup.exists()) await file.copy(backup.path);
+      await save(data);
+    }
     return data;
   }
 
   static void migrate(Map<String, dynamic> data) {
+    if (data['version'] == 4) return;
+    // Version 3 was already stored in canonical order during the UI changes.
+    if (data['version'] == 3) {
+      data['version'] = 4;
+      return;
+    }
+    if (data['version'] == 2) {
+      _canonicalKeys(data);
+      return;
+    }
     if (data['version'] != 1) return;
     for (final raw in (data['profiles'] as List? ?? [])) {
       final profile = raw as Map<String, dynamic>;
@@ -29,12 +45,35 @@ class ProfileStore {
           _rotatedId(entry.key): entry.value,
       };
       for (final rawCombo in (profile['combinations'] as List? ?? [])) {
-        final combo = Map<String, dynamic>.from(rawCombo);
+        final combo = rawCombo as Map<String, dynamic>;
         combo['held'] = _rotatedId(combo['held'] as String);
         combo['trigger'] = _rotatedId(combo['trigger'] as String);
       }
     }
     data['version'] = 2;
+    _canonicalKeys(data);
+  }
+
+  // Firmware protocol 3 owns canonical orientation; migrate legacy profiles once.
+  static void _canonicalKeys(Map<String, dynamic> data) {
+    String keyId(String id) {
+      final match = RegExp(r'^key-(\d{2})$').firstMatch(id);
+      if (match == null) return id;
+      return 'key-${(17 - int.parse(match.group(1)!)).toString().padLeft(2, '0')}';
+    }
+
+    for (final profile in data['profiles'] as List) {
+      final bindings = profile['bindings'] as Map? ?? {};
+      profile['bindings'] = {
+        for (final entry in bindings.entries)
+          keyId(entry.key as String): entry.value,
+      };
+      for (final combo in profile['combinations'] as List? ?? []) {
+        combo['held'] = keyId(combo['held'] as String);
+        combo['trigger'] = keyId(combo['trigger'] as String);
+      }
+    }
+    data['version'] = 4;
   }
 
   static String _rotatedId(String id) {
@@ -54,11 +93,11 @@ class ProfileStore {
   }
 
   static void validate(Map<String, dynamic> data) {
-    if (data['version'] != 2 ||
+    if (data['version'] != 4 ||
         data['profiles'] is! List ||
         (data['profiles'] as List).isEmpty) {
       throw const FormatException(
-        'This is not a NovaKey profile export (version 1).',
+        'This is not a NovaKey profile export (supported versions: 1–4).',
       );
     }
     final ids = <String>{};

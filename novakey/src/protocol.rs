@@ -122,7 +122,7 @@ fn handle_packet(data: &mut [u8; 32], flash: &mut FlashStorage) -> bool {
             with_state(|state| state.heartbeat = now);
         }
         0x02 => {
-            data[4] = 2; // protocol version
+            data[4] = 3; // canonical rotated matrix IDs
             data[5] = 16; // number of matrix keys
             data[6] = 3; // number of encoders
             data[7] = state::NUM_CONTROLS as u8;

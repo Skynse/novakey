@@ -27,10 +27,22 @@ pub const FLASH_SECTOR_SIZE: u32 = 4096;
 pub const FLASH_PAGE_SIZE: usize = 256;
 
 /// First two bytes of the stored profile, used to detect a written record.
-pub const MAPPING_MAGIC: [u8; 2] = [b'N', b'K'];
+pub const MAPPING_MAGIC: [u8; 2] = [b'N', b'3'];
 
 /// QMK's default onboard profile.
-pub const DEFAULTS: [u16; NUM_CONTROLS] = [
+pub const DEFAULTS: [u16; NUM_CONTROLS] = rotated_defaults();
+
+const fn rotated_defaults() -> [u16; NUM_CONTROLS] {
+    let mut result = LEGACY_DEFAULTS;
+    let mut i = 0;
+    while i < 16 {
+        result[i] = LEGACY_DEFAULTS[15 - i];
+        i += 1;
+    }
+    result
+}
+
+const LEGACY_DEFAULTS: [u16; NUM_CONTROLS] = [
     0x011D, // Ctrl+Z
     0x031D, // Ctrl+Shift+Z
     0x0005, // B
@@ -129,12 +141,18 @@ pub fn encode_mapping(mapping: &[u16; NUM_CONTROLS], out: &mut [u8; MAPPING_BYTE
 
 /// Decode a persisted profile. Returns `None` if the magic does not match.
 pub fn decode_mapping(bytes: &[u8]) -> Option<[u16; NUM_CONTROLS]> {
-    if bytes.len() < MAPPING_BYTES + 2 || bytes[0..2] != MAPPING_MAGIC {
+    if bytes.len() < MAPPING_BYTES + 2
+        || (bytes[0..2] != MAPPING_MAGIC && bytes[0..2] != [b'N', b'K'])
+    {
         return None;
     }
     let mut mapping = [0u16; NUM_CONTROLS];
     for (i, slot) in mapping.iter_mut().enumerate() {
         *slot = (bytes[2 + i * 2] as u16) | ((bytes[3 + i * 2] as u16) << 8);
+    }
+    // Legacy records retain PCB order. New records store canonical IDs.
+    if bytes[0..2] == [b'N', b'K'] {
+        mapping[..16].reverse();
     }
     Some(mapping)
 }

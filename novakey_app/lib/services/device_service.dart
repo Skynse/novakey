@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../models/control_binding.dart';
-import '../device/device_layout.dart';
+import '../device/protocol_controls.dart';
 import 'profile_store.dart';
 
 class DeviceEvent {
@@ -71,13 +71,13 @@ class DeviceService extends ChangeNotifier {
       );
       await ready.future.timeout(const Duration(seconds: 4));
       final info = await request(2);
-      if (info[4] != 2) {
+      if (info[4] != 3) {
         throw StateError(
-          'Firmware update required: install the new NovaKey protocol 2 UF2.',
+          'Firmware update required: install the new NovaKey protocol 3 UF2.',
         );
       }
       connected = true;
-      status = 'NovaKey • protocol 2';
+      status = 'NovaKey • protocol 3';
       _heartbeat = Timer.periodic(const Duration(seconds: 1), (_) {
         if (connected) {
           unawaited(
@@ -98,12 +98,12 @@ class DeviceService extends ChangeNotifier {
   void _receive(List<int> p) {
     if (p.length != 32 || p[0] != 78 || p[1] != 75) return;
     if (p[2] == 64) {
-      if (p[4] < controls.length) {
+      if (p[4] < protocolControlIds.length) {
         final repeat = p[6].clamp(1, 4);
         for (var i = 0; i < repeat; i++) {
-          events.add(DeviceEvent(controls[p[4]].id, p[5] == 1));
+          events.add(DeviceEvent(protocolControlIds[p[4]], p[5] == 1));
           if (p[5] == 1 && repeat > 1) {
-            events.add(DeviceEvent(controls[p[4]].id, false));
+            events.add(DeviceEvent(protocolControlIds[p[4]], false));
           }
         }
       }
@@ -176,8 +176,8 @@ class DeviceService extends ChangeNotifier {
 
   Future<void> upload(Map<String, ControlBinding> bindings) async {
     await request(0x20);
-    for (var i = 0; i < controls.length; i++) {
-      final b = bindings[controls[i].id] ?? unassigned;
+    for (var i = 0; i < protocolControlIds.length; i++) {
+      final b = bindings[protocolControlIds[i]] ?? unassigned;
       await request(0x21, [
         i,
         b.onboard ? b.keyCode : 0,

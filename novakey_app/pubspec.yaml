@@ -59,7 +59,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/novakey-layout.svg
+    - assets/novakey_v3.png
     - assets/keycap.svg
     - assets/hid_bridge.py
     - assets/kwin_focus.js

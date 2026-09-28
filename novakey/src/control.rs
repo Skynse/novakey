@@ -40,7 +40,9 @@ impl ControlProcessor {
         match event.pos {
             KeyboardEventPos::Key(KeyPos { row, col }) => {
                 if (row as usize) < keymap::PHYSICAL_ROWS && (col as usize) < 4 {
-                    self.handle(row * 4 + col, event.pressed);
+                    // Operating orientation: OLED/USB toward the user.
+                    // Rotate matrix identity once, at the firmware boundary.
+                    self.handle(15 - (row * 4 + col), event.pressed);
                 } else if row == 0 && (4..=6).contains(&col) {
                     // Encoder buttons sit at row 0, columns 4..=6.
                     self.handle(16 + (col - 4) * 3, event.pressed);

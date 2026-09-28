@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 import '../services/device_service.dart';
 import '../theme/palette.dart';
@@ -8,19 +9,19 @@ import '../theme/palette.dart';
 const animationNames = [
   'Wave tank',
   'Particle flow field',
-  'Reaction–diffusion',
+  'Reaction-diffusion',
   'Boids',
   'Fluid-like ink',
   'Metaballs',
   'Dithered plasma',
   'Rule 30',
-  'Langton’s ants',
+  "Langton's ants",
   'Damped membrane',
   'Display diagnostic',
 ];
 
 Future<void> showAnimationPicker(BuildContext context, DeviceService device) =>
-    showDialog<void>(
+    showShadDialog<void>(
       context: context,
       builder: (_) => _AnimationDialog(device: device),
     );
@@ -35,7 +36,7 @@ class _AnimationDialog extends StatefulWidget {
 
 class _AnimationDialogState extends State<_AnimationDialog> {
   int? selected;
-  String status = 'Reading current mode…';
+  String status = 'Reading current mode';
   bool busy = true;
 
   @override
@@ -65,7 +66,7 @@ class _AnimationDialogState extends State<_AnimationDialog> {
   Future<void> _select(int mode) async {
     setState(() {
       selected = mode;
-      status = 'Switching animation…';
+      status = 'Switching animation';
       busy = true;
     });
     try {
@@ -85,45 +86,53 @@ class _AnimationDialogState extends State<_AnimationDialog> {
   }
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    icon: const Icon(Icons.animation, color: signal),
-    title: const Text('OLED animation'),
-    content: SizedBox(
-      width: 430,
+  Widget build(BuildContext context) => ShadDialog(
+    title: const Row(
+      children: [
+        Icon(LucideIcons.sparkles, size: 18, color: signal),
+        SizedBox(width: 9),
+        Text('OLED animation'),
+      ],
+    ),
+    description: const Text(
+      'Choose the live simulation. The mode lives in device SRAM and resets when NovaKey loses power.',
+    ),
+    actions: [
+      ShadButton.outline(
+        enabled: !busy,
+        onPressed: () => Navigator.pop(context),
+        child: const Text('Done'),
+      ),
+    ],
+    child: Padding(
+      padding: const EdgeInsets.only(top: 8),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
-            'The active mode lives in device SRAM. It returns to Wave tank '
-            'when NovaKey loses power or restarts.',
-            style: TextStyle(color: muted, height: 1.45),
-          ),
-          const SizedBox(height: 18),
-          DropdownButtonFormField<int>(
+          const SizedBox(height: 7),
+          ShadSelect<int>(
+            key: ValueKey(selected),
             initialValue: selected,
-            decoration: const InputDecoration(labelText: 'Simulation'),
-            items: [
+            enabled: !busy,
+            placeholder: const Text('Choose a simulation'),
+            onChanged: (value) {
+              if (value != null) unawaited(_select(value));
+            },
+            selectedOptionBuilder: (_, value) => Text(animationNames[value]),
+            options: [
               for (var index = 0; index < animationNames.length; index++)
-                DropdownMenuItem(
-                  value: index,
-                  child: Text(animationNames[index]),
-                ),
+                ShadOption(value: index, child: Text(animationNames[index])),
             ],
-            onChanged: busy ? null : (value) => _select(value!),
           ),
           const SizedBox(height: 16),
-          if (busy) const LinearProgressIndicator(),
-          if (busy) const SizedBox(height: 12),
-          Text(status, style: const TextStyle(color: muted, fontSize: 12)),
+          if (busy) ...[
+            const ShadProgress(minHeight: 4, color: signal),
+            const SizedBox(height: 10),
+          ],
+          Text(status, style: const TextStyle(color: muted, fontSize: 11)),
         ],
       ),
     ),
-    actions: [
-      TextButton(
-        onPressed: busy ? null : () => Navigator.pop(context),
-        child: const Text('Done'),
-      ),
-    ],
   );
 }

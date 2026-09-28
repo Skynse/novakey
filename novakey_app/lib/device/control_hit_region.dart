@@ -11,6 +11,7 @@ class ControlHitRegion extends StatefulWidget {
     required this.binding,
     required this.onTap,
     this.displayLabel,
+    this.showContent = true,
   });
 
   final ControlSpec control;
@@ -18,6 +19,7 @@ class ControlHitRegion extends StatefulWidget {
   final ControlBinding? binding;
   final VoidCallback onTap;
   final String? displayLabel;
+  final bool showContent;
 
   @override
   State<ControlHitRegion> createState() => _ControlHitRegionState();
@@ -28,7 +30,8 @@ class _ControlHitRegionState extends State<ControlHitRegion> {
 
   @override
   Widget build(BuildContext context) {
-    final isSequence = widget.binding?.kind == ActionKind.sequence;
+    final isSequence =
+        widget.showContent && widget.binding?.kind == ActionKind.sequence;
     final isTiny =
         widget.control.type == ControlType.encoderClockwise ||
         widget.control.type == ControlType.encoderCounterClockwise;
@@ -52,11 +55,11 @@ class _ControlHitRegionState extends State<ControlHitRegion> {
               borderRadius: BorderRadius.circular(
                 widget.control.type == ControlType.encoderPress
                     ? 100
-                    : (isTiny ? 6 : 11),
+                    : (isTiny ? 6 : 3),
               ),
               border: Border.all(
                 color: widget.selected
-                    ? signal
+                    ? paper
                     : isSequence
                     ? orange.withValues(alpha: .8)
                     : hovered
@@ -64,7 +67,7 @@ class _ControlHitRegionState extends State<ControlHitRegion> {
                     : Colors.transparent,
                 width: widget.selected ? 2 : 1,
               ),
-              boxShadow: widget.selected
+              boxShadow: widget.selected && widget.showContent
                   ? [
                       BoxShadow(
                         color: signal.withValues(alpha: .16),
@@ -75,7 +78,9 @@ class _ControlHitRegionState extends State<ControlHitRegion> {
                   : null,
             ),
             alignment: Alignment.center,
-            child: isTiny
+            child: !widget.showContent
+                ? null
+                : isTiny
                 ? Icon(
                     widget.control.type == ControlType.encoderClockwise
                         ? Icons.rotate_right

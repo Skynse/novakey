@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 import '../services/studio_controller.dart';
 import '../services/profile_store.dart';
@@ -8,7 +9,6 @@ import '../models/profile.dart';
 import '../models/control_binding.dart';
 import '../device/device_layout.dart';
 import '../inspector/binding_editor.dart';
-import '../theme/palette.dart';
 import 'assignment_list.dart';
 import 'profile_sidebar.dart';
 import 'combination_dialog.dart';
@@ -16,6 +16,7 @@ import 'dialogs.dart';
 import 'application_link_dialog.dart';
 import 'animation_dialog.dart';
 import 'firmware_dialog.dart';
+import 'studio_chrome.dart';
 
 class StudioScreen extends StatefulWidget {
   const StudioScreen({super.key});
@@ -202,97 +203,29 @@ class _StudioScreenState extends State<StudioScreen> {
     listenable: controller,
     builder: (context, _) {
       if (controller.loading) {
-        return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        return const Scaffold(
+          body: Center(child: SizedBox(width: 180, child: ShadProgress())),
+        );
       }
       return Scaffold(
         body: SafeArea(
           child: Column(
             children: [
-              Container(
-                height: 66,
-                padding: const EdgeInsets.symmetric(horizontal: 22),
-                child: Row(
-                  children: [
-                    const Icon(Icons.tune, color: signal, size: 23),
-                    const SizedBox(width: 12),
-                    const Text(
-                      'NovaKey',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    const Text('Studio', style: TextStyle(color: muted)),
-                    const Spacer(),
-                    if (debugMode) ...[
-                      OutlinedButton.icon(
-                        onPressed: controller.device.connected
-                            ? () => showAnimationPicker(
-                                context,
-                                controller.device,
-                              )
-                            : null,
-                        icon: const Icon(Icons.animation, size: 17),
-                        label: const Text('Animation'),
-                      ),
-                      const SizedBox(width: 10),
-                      OutlinedButton.icon(
-                        onPressed: () =>
-                            showFirmwareUpdater(context, controller.device),
-                        icon: const Icon(Icons.memory, size: 17),
-                        label: const Text('Firmware'),
-                      ),
-                      const SizedBox(width: 10),
-                    ],
-                    TextButton.icon(
-                      onPressed:
-                          controller.device.connecting ||
-                              controller.device.connected
-                          ? null
-                          : controller.device.connect,
-                      icon: Icon(
-                        controller.device.connected ? Icons.usb : Icons.usb_off,
-                        size: 17,
-                      ),
-                      label: Text(
-                        controller.device.connected
-                            ? 'Connected'
-                            : controller.device.connecting
-                            ? 'Connecting…'
-                            : 'Connect pad',
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    PopupMenuButton<String>(
-                      tooltip: 'Studio options',
-                      onSelected: (value) {
-                        if (value == 'debug') {
-                          setState(() => debugMode = !debugMode);
-                        }
-                      },
-                      itemBuilder: (_) => [
-                        CheckedPopupMenuItem<String>(
-                          value: 'debug',
-                          checked: debugMode,
-                          child: const Text('Debug mode'),
-                        ),
-                      ],
-                    ),
-                    IconButton(
-                      tooltip: 'Stop all actions and release keys',
-                      onPressed: () {
-                        unawaited(controller.runner.stop());
-                        if (controller.device.running) {
-                          unawaited(controller.device.capture(false));
-                        }
-                      },
-                      icon: const Icon(Icons.stop_circle_outlined),
-                    ),
-                  ],
-                ),
+              StudioHeader(
+                controller: controller,
+                debugMode: debugMode,
+                onToggleDebug: () => setState(() => debugMode = !debugMode),
+                onAnimation: () =>
+                    showAnimationPicker(context, controller.device),
+                onFirmware: () =>
+                    showFirmwareUpdater(context, controller.device),
+                onStop: () {
+                  unawaited(controller.runner.stop());
+                  if (controller.device.running) {
+                    unawaited(controller.device.capture(false));
+                  }
+                },
               ),
-              const Divider(height: 1),
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, box) => SingleChildScrollView(
@@ -312,55 +245,7 @@ class _StudioScreenState extends State<StudioScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                    24,
-                                    22,
-                                    24,
-                                    0,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              controller.active.name,
-                                              style: const TextStyle(
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 5),
-                                            Text(
-                                              controller.saving
-                                                  ? 'Saving…'
-                                                  : controller.saveFailed
-                                                  ? 'Changes could not be saved'
-                                                  : '${controller.active.bindings.length} assignments · local profiles',
-                                              style: const TextStyle(
-                                                color: muted,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      OutlinedButton.icon(
-                                        onPressed: controller.device.connected
-                                            ? controller.upload
-                                            : null,
-                                        icon: const Icon(
-                                          Icons.save_alt,
-                                          size: 17,
-                                        ),
-                                        label: const Text('Save onboard'),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                ProfileHeader(controller: controller),
                                 Expanded(
                                   child: AssignmentList(
                                     profile: controller.active,
@@ -369,9 +254,9 @@ class _StudioScreenState extends State<StudioScreen> {
                                     onEdit: edit,
                                     onAddCombination: () => combo(),
                                     onEditCombination: combo,
-                                    onDeleteCombination: (i) {
+                                    onDeleteCombination: (index) {
                                       controller.active.combinations.removeAt(
-                                        i,
+                                        index,
                                       );
                                       unawaited(controller.runner.stop());
                                       unawaited(controller.persist());
@@ -387,42 +272,7 @@ class _StudioScreenState extends State<StudioScreen> {
                   ),
                 ),
               ),
-              Container(
-                color: panel,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10,
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      controller.message.isEmpty
-                          ? Icons.info_outline
-                          : Icons.chat_bubble_outline,
-                      size: 15,
-                      color: muted,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        controller.message.isEmpty
-                            ? controller.device.status
-                            : controller.message,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: muted, fontSize: 12),
-                      ),
-                    ),
-                    if (controller.message.isNotEmpty)
-                      IconButton(
-                        visualDensity: VisualDensity.compact,
-                        tooltip: 'Dismiss',
-                        onPressed: () => controller.report(''),
-                        icon: const Icon(Icons.close, size: 14),
-                      ),
-                  ],
-                ),
-              ),
+              StudioStatusBar(controller: controller),
             ],
           ),
         ),

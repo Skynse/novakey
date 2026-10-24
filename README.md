@@ -10,6 +10,26 @@ Studio is the desktop app for the novakey. It can be used to configure profiles 
 
 ![Studio](assets/studio.png)
 
+## Hardware
+
+The PCB was designed in KiCad. Source files are in `kicad_files/`.
+
+![PCB render](assets/kicad/pcb_iso.png)
+
+<table>
+  <tr>
+    <td align="center"><img src="assets/kicad/pcb_top.png" alt="PCB top"><br><sub>Top</sub></td>
+    <td align="center"><img src="assets/kicad/pcb_bottom.png" alt="PCB bottom"><br><sub>Bottom</sub></td>
+  </tr>
+</table>
+
+<details>
+<summary>Schematic</summary>
+
+![Schematic](assets/kicad/schematic.png)
+
+</details>
+
 ## Bill of materials
 
 ### Electronics

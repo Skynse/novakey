@@ -54,14 +54,14 @@ impl<D: DisplayDriver<Color = BinaryColor>> OledDisplay<D> {
         }
         self.engine.step();
 
-        if last_activity.elapsed().as_millis() >= SLEEP_MS {
-            if !self.blanked {
-                self.display.clear(BinaryColor::Off).ok();
-                self.display.flush().await;
-                self.blanked = true;
-            }
-            return;
-        }
+        // if last_activity.elapsed().as_millis() >= SLEEP_MS {
+        //     if !self.blanked {
+        //         self.display.clear(BinaryColor::Off).ok();
+        //         self.display.flush().await;
+        //         self.blanked = true;
+        //     }
+        //     return;
+        // }
         self.blanked = false;
         self.draw();
         self.display.flush().await;
